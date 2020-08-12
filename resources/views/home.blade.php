@@ -30,7 +30,9 @@
 								<td>{{$p->updated_at->format("H:i:s")}}</td>
 								<td>{{$p->correlativo}}</td>
 								<td>${{number_format($p->total,2)}}</td>
-								<td></td>
+								<td>
+									<a href="{{url('pdf/'.$p->id)}}" target="_blank" class="btn btn-info"><i class="fas fa-print"></i></a>
+								</td>
 							</tr>
 							@endforeach
 						</tbody>
@@ -98,16 +100,7 @@
        			</div>
        		</div>
        	</div>
-       	<div class="col-md-6">
-       		<div class="card card-info">
-       			<div class="card-header">
-       				Pizzas favoritas
-       			</div>
-       			<div class="card-body">
-       				
-       			</div>
-       		</div>
-       	</div>
+       	
 
        </div>
     </div>
