@@ -23,16 +23,24 @@ _Sigue estos ejemplos_
 
 _Descargue el repositorio y copielo en la carpeta de su preferencia_
 
-_Accede a la campera desde la consola_
+_Accede a la carpera directorio del proyecto_
 
 ```
-Da un ejemplo
+C:\Descargas\pizzeria
 ```
 
-_Y repite_
+_Despues con un editor de texto copie el contenido del archivo .env.example en un nuevo archivo llamada .env_
 
 ```
-hasta finalizar
+Dentro del archivo .env diríjase al la linea
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=database
+DB_USERNAME=root
+DB_PASSWORD='secret'
+
+y configure segun su servidor mysql
 ```
 
 _Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
