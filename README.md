@@ -13,13 +13,13 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 
 _Que cosas necesitas para instalar el software y como instalarlas_
 
-```
-Componser (https://getcomposer.org/) - click para descargar
-```
 
-```
- Nodejs(https://nodejs.org/en/) - click para descargar
-```
+Componser (https://getcomposer.org/) - click para descargar
+
+
+NodeJs (https://nodejs.org/en/) - click para descargar
+
+_Para utilizar el comando npm_
 
 
 ```
@@ -71,7 +71,7 @@ composer install
 
 _Esperamos que se descarguen las dependencias composer del proyecto_
 
-
+_Luego realizamos las migraciones_
 ```
 php artisan migrate
 ```
@@ -112,7 +112,7 @@ contraseña: sysadmin
 
 
 
-* **Mario Cardoza** - *Programador* - [villanuevand](https://github.com/mariocardoza)
+* **Mario Cardoza** - *Programador* - [mariocardoza](https://github.com/mariocardoza)
 
 ## Licencia 📄
 
