@@ -14,7 +14,27 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 _Que cosas necesitas para instalar el software y como instalarlas_
 
 ```
-Da un ejemplo
+Componser (https://getcomposer.org/) - click para descargar
+```
+
+```
+ Nodejs(https://nodejs.org/en/) - click para descargar
+```
+
+
+```
+
+Extenciones para PHP
+PHP >= 7.2.5
+BCMath PHP Extension
+Ctype PHP Extension
+Fileinfo PHP extension
+JSON PHP Extension
+Mbstring PHP Extension
+OpenSSL PHP Extension
+PDO PHP Extension
+Tokenizer PHP Extension
+XML PHP Extension
 ```
 
 ### Instalación 🔧
@@ -46,6 +66,13 @@ y configure segun su servidor mysql
 _Luego desde la terminal ejecute el siguiente comando_
 
 ```
+composer install
+```
+
+_Esperamos que se descarguen las dependencias composer del proyecto_
+
+
+```
 php artisan migrate
 ```
 _Este comando hara las migraciones para poner utilizar el proyecto_
@@ -75,7 +102,6 @@ contraseña: sysadmin
 
 ## Construido con 🛠️
 
-_Menciona las herramientas que utilizaste para crear tu proyecto_
 
 * [Laravel](https://laravel.com/) 
 * [Vuejs](https://vuejs.org/) 
