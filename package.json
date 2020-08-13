@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "admin-lte": "^3.0.5",
+        "inputmask": "^5.0.3",
         "vue-sweetalert2": "^3.0.5"
     }
 }

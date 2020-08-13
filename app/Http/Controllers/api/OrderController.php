@@ -11,6 +11,7 @@ use App\Personalizada;
 use App\PersonalizadaDetail;
 use App\OrderExtra;
 use DB;
+use Validator;
 
 class OrderController extends Controller
 {
@@ -85,6 +86,7 @@ class OrderController extends Controller
         DB::commit();
         return array(1,$cuantos);
         }catch(Exception $e){
+            DB::rollback();
             return array(-1,"error",$e->getMessage());
         }
     }
@@ -97,7 +99,7 @@ class OrderController extends Controller
                     DB::beginTransaction();
                     $order=Order::findorFail($count->id);
                     $total=$order->total;
-                    $t=$total+$request->total;
+                    $t=$total+$request->precio;
                     $order->total=$t;
                     $order->save();
 
@@ -300,6 +302,7 @@ class OrderController extends Controller
 
     public function confirmar($id,Request $request)
     {
+        $this->validar($request->all())->validate();
         try{
             $orden=Order::find($id);
             $orden->nombre=$request->nombre;
@@ -314,5 +317,22 @@ class OrderController extends Controller
         }catch(Exception $e){
             return array(-1,"error",$e->getMessage());
         }
+    }
+
+    protected function validar(array $data)
+    {
+        $mensajes=array(
+          'nombre.required'=>'El nombre es obligatorio',
+          'email.required'=>'El email es obligatorio',
+          'telefono.required'=>'El telefono es obligatorio',
+          'direccion.required'=>'La dirección es obligatorio',
+
+      );
+      return Validator::make($data, [
+          'nombre'=>'required',
+          'telefono'=>'required',
+          'direccion'=>'required',
+          'email'=>'required|email',
+      ],$mensajes);
     }
 }

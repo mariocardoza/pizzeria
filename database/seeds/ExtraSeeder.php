@@ -30,6 +30,16 @@ class ExtraSeeder extends Seeder
 	    $extra->nombre='Orden pan con ajo';
 	    $extra->precio=2.25;
 	    $extra->save();
+
+        $extra= new Extra();
+        $extra->nombre='Palillos de queso';
+        $extra->precio=2.50;
+        $extra->save();
+
+        $extra= new Extra();
+        $extra->nombre='Té helado';
+        $extra->precio=1.50;
+        $extra->save();
     }
 
     public function truncateTables(array $tables)

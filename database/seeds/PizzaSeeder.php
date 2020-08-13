@@ -25,6 +25,10 @@ class PizzaSeeder extends Seeder
         $masa->nombre='Masa delgada';
         $masa->precio=0;
         $masa->save();
+        $masa=new Masa();
+        $masa->nombre='Queso en la orilla';
+        $masa->precio=1.99;
+        $masa->save();
 
         $tamanio=new Tamanio();
         $tamanio->nombre='Super Personal (4 porciones)';

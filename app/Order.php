@@ -65,7 +65,7 @@ class Order extends Model
     	}
        
         foreach($orden->personalizadas as $p){
-            $html.='<div class="col-sm-12"><span class="float-left"><b>personalizada</b></span><span class="float-right"><b>$'.number_format($p->precio,2).'</b></span> &nbsp;<a class="quitar_personalizada" data-precio="'.$p->precio.'" data-order="'.$p->id.'" data-id="'.$orden->id.'" href="javascript:void(0)"><i style="color:red;" class="fas fa-trash"></i></a></div>';
+            $html.='<div class="col-sm-12"><span class="float-left"><b>Personalizada</b></span><span class="float-right"><b>$'.number_format($p->precio,2).'</b></span> &nbsp;<a class="quitar_personalizada" data-precio="'.$p->precio.'" data-order="'.$p->id.'" data-id="'.$orden->id.'" href="javascript:void(0)"><i style="color:red;" class="fas fa-trash"></i></a></div>';
             $html.='<div class="col-sm-12"><ul>';
             //
                 $html.='<li>'.$p->tamanio->nombre.' '.$p->tamanio->precio.'</li>';

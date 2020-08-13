@@ -52,7 +52,7 @@
                                 <tr v-for="(masa,index) in masas">
                                     <td>{{index+1}}</td>
                                     <td>{{masa.nombre}}</td>
-                                    <td>{{masa.precio}}</td>
+                                    <td>${{masa.precio}}</td>
                                     <td></td>
                                 </tr>
                             </tbody>

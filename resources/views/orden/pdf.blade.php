@@ -51,7 +51,7 @@
     		</ul></div>
     	@endforeach
         @foreach($orden->personalizadas as $p)
-            <div class="col-sm-12"><span class="float-left"><b>personalizada</b></span><span class="float-right"><b>${{number_format($p->precio,2)}}</b></span> &nbsp;</div>
+            <div class="col-sm-12"><span class="float-left"><b>personalizada</b></span> - <span class="float-right"><b>${{number_format($p->precio,2)}}</b></span> &nbsp;</div>
             <div class="col-sm-12"><ul>
                <li>{{$p->tamanio->nombre}} {{$p->tamanio->precio}}</li>
                 <li>{{$p->masa->nombre}}</li>

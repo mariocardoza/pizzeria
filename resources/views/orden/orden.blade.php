@@ -202,7 +202,7 @@ endif;
           </div>
           <div class="form-group">
             <label for="" class="control-label">Teléfono</label>
-            <input type="text" class="form-control" name="telefono" autocomplete="off" placeholder="Digite la placa">
+            <input type="text" class="form-control telefono" name="telefono" autocomplete="off" placeholder="Digite el telefono">
           </div>
           <div class="form-group">
             <label for="" class="control-label">Dirección</label>
@@ -226,7 +226,7 @@ endif;
 	localStorage.setItem('token', token);
 	$(document).ready(function(e){
 		//cargar las del carrito
-		
+		Inputmask({"mask":"9999-9999","clearIncomplete":true}).mask(".telefono");
 		pendientes();
 		//evento click para pizzas de especialidad
 		$(document).on("click",".especialidad",function(e){
@@ -275,10 +275,18 @@ endif;
 				let texto=$(".sel_ingre option:selected").text();
 				let id=$(".sel_ingre").val();
 				let precio=parseFloat($(".sel_ingre option:selected").attr('data-precio'));
-				$(".losingres").append("<li data-id="+id+">"+texto+"</li>");
+				$(".losingres").append('<li data-id='+id+'>'+texto+' <i style="color:red;" class="fas fa-trash elli" data-precio='+precio+' ></i></li>');
 				totalito=totalito+precio;
 				$(".eltotal").text("$"+totalito.toFixed(2));
 			}
+		});
+
+		$(document).on("click",".elli",function(e){
+			e.preventDefault();
+			let precio=parseFloat($(this).attr("data-precio"));
+			$(this).parent("li").remove();
+			totalito=totalito-precio;
+			$(".eltotal").text("$"+totalito.toFixed(2));
 		});
 
 		//cancelar agregar orden
@@ -568,7 +576,13 @@ endif;
 			                'pdf/'+json[1].id,
 			                '_blank' // <- This is what makes it open in a new window.
 			              );
+					}else{
+						toastr.error("Ocurrio un error");
 					}
+				},error: function(error){
+					$.each(error.responseJSON.errors,function(index,value){
+	      				toastr.error(value);
+	      			});
 				}
 			});
 		});

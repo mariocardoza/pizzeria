@@ -38,7 +38,13 @@ class HomeController extends Controller
             ->groupBy('p.nombre')
             ->orderBy('veces','DESC')
             ->get();
-            return view('home',compact('pedidos','frecuentes','especialidades'));
+            $ingredientes=DB::table('personalizada_details as r')
+            ->select('i.nombre',DB::raw('count(r.ingredient_id) AS veces'))
+            ->join('ingredients as i','i.id','=','r.ingredient_id','inner')
+            ->groupBy('i.nombre')
+            ->orderBy('veces','DESC')
+            ->get();
+            return view('home',compact('pedidos','frecuentes','especialidades','ingredientes'));
         else:
             
             return redirect('orden');

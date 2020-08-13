@@ -100,7 +100,35 @@
        			</div>
        		</div>
        	</div>
-       	
+       	<div class="col-md-6">
+       		<div class="card card-info">
+       			<div class="card-header">
+       				Ingredientes favoritos
+       			</div>
+       			<div class="card-body">
+       				<table class="table">
+						<thead>
+							<tr>
+								<th>N°</th>
+								<th>Nombre</th>
+								<th>Cant. ordenes</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($ingredientes as $index => $f)
+							<tr>
+								<td>{{$index+1}}</td>
+								<td>{{$f->nombre}}</td>
+								<td>{{$f->veces}}</td>
+								<td></td>
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+       			</div>
+       		</div>
+       	</div>
 
        </div>
     </div>
