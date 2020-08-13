@@ -20,6 +20,17 @@ endif;
 							<div class="card" >
 					  
 							  <div class="card-body">
+							    <h5 class="card-title">Arma tu pizza</h5>
+							    <img class="card-img-top" src="images/suprema.jpg" width="40" height="130" alt="Card image cap">
+							    <button class="btn btn-info personalizar">Personalizar</button>
+							    <span class="float-right">Desde $6.99</span>
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="card" >
+					  
+							  <div class="card-body">
 							    <h5 class="card-title">Pizza de Especialidad</h5>
 							    <img class="card-img-top" src="images/suprema.jpg" width="40" height="130" alt="Card image cap">
 							    <button class="btn btn-info especialidad">Ordenar</button>
@@ -103,6 +114,60 @@ endif;
 						</div>
 						
 					</div>
+					<div class="row armar" style="display: none;">
+						<div class="col-sm-8">
+							<div class="card card-info">
+							<div class="card-header">
+								Personalizar
+							</div>
+							<div class="card-body">
+								<div class="row " >
+									<div class="col-sm-6">
+										Seleccione las porciones
+										<select name="" id="" class="form-control sel_tamanio">
+											<option value="">Tamaño</option>
+										@foreach($tamanios as $e)
+											<option data-precio="{{$e->precio}}" value="{{$e->id}}">{{$e->nombre}} ${{$e->precio}}</option>
+										@endforeach
+										</select>
+									</div>
+									<div class="col-sm-6">
+										Seleccione la masa
+										<select disabled="" name="" id="" class="form-control sel_masa">
+											<option value="">Seleccione</option>
+										@foreach($masas as $e)
+											<option data-precio="{{$e->precio}}" value="{{$e->id}}">{{$e->nombre}} ${{$e->precio}}</option>
+										@endforeach
+										</select>
+									</div>
+									<div class="col-sm-10">
+										Seleccione los ingredientes
+										<select disabled="" name="" id="" class="form-control sel_ingre">
+											<option value="">Seleccione</option>
+											@foreach($ingredientes as $e)
+												<option data-precio="{{$e->precio}}" value="{{$e->id}}">{{$e->nombre}} ${{$e->precio}}</option>
+											@endforeach
+										</select>
+									</div>
+									<div class="col-sm-2">
+										<button disabled="" class="btn btn-info anadir">Añadir</button>
+									</div>
+									<br><br><br>
+									<div class="col-sm-12">
+										<ul class="losingres">
+										</ul>
+										<h4 class="eltotal">$0.00</h4>
+									</div>
+									<br><br><br>
+									<div class="col-sm-12">
+										<button class="btn btn-info addPersonalizada">Agregar</button>
+										<button class="btn btn-danger cancelar_orden">Cancelar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>
@@ -156,6 +221,8 @@ endif;
 @section('scripts')
 <script>
 	const token='<?php echo $eltoken; ?>';
+	let totalito=0;
+	
 	localStorage.setItem('token', token);
 	$(document).ready(function(e){
 		//cargar las del carrito
@@ -167,12 +234,70 @@ endif;
 			$(".agregar").show();
 			$(".orden").hide();
 		});
+		$(document).on("click",".personalizar",function(e){
+			e.preventDefault();
+			$(".armar").show();
+			$(".orden").hide();
+		});
+		//change para el tamaño
+		$(document).on("change",".sel_tamanio",function(e){
+			e.preventDefault();
+			let t=$(".sel_tamanio").val();
+			if(t!=''){
+				$(".sel_masa").prop("disabled",false);
+				totalito=0;
+				let texto=$(".sel_tamanio option:selected").text();
+				let precio=parseFloat($(".sel_tamanio option:selected").attr('data-precio'));
+				totalito=totalito+precio;
+				$(".eltotal").text("$"+totalito.toFixed(2));
+			}
+		});
+
+		$(document).on("change",".sel_masa",function(e){
+			e.preventDefault();
+			let t=$(".sel_masa").val();
+			if(t!=''){
+				$(".sel_ingre").prop("disabled",false);
+				$(".anadir").prop("disabled",false);
+				let precio=parseFloat($(".sel_masa option:selected").attr('data-precio'));
+				totalito=totalito+precio;
+				$(".eltotal").text("$"+totalito.toFixed(2));
+			}
+		});
+
+		//añadir
+		$(document).on("click",".anadir",function(e){
+			e.preventDefault();
+			let ingre=$(".sel_ingre").val();
+			if(ingre!=''){
+				$(".sel_tamanio").prop("disabled",true);
+				$(".sel_masa").prop("disabled",true);
+				let texto=$(".sel_ingre option:selected").text();
+				let id=$(".sel_ingre").val();
+				let precio=parseFloat($(".sel_ingre option:selected").attr('data-precio'));
+				$(".losingres").append("<li data-id="+id+">"+texto+"</li>");
+				totalito=totalito+precio;
+				$(".eltotal").text("$"+totalito.toFixed(2));
+			}
+		});
 
 		//cancelar agregar orden
 		$(document).on("click",".cancelar_orden",function(e){
 			e.preventDefault();
 			$(".agregar").hide();
+			$(".armar").hide();
 			$(".orden").show();
+
+			$(".sel_tamanio").val("");
+			$(".sel_masa").val("");
+			$(".sel_ingre").val("");
+			$(".sel_tamanio").prop("disabled",false);
+			$(".sel_masa").prop("disabled",true);
+			$(".sel_ingre").prop("disabled",true);
+			$(".anadir").prop("disabled",true);
+			totalito=0;
+			$(".eltotal").text("$"+totalito.toFixed(2));
+			$(".losingres").empty();
 		});
 
 		//cange de las especialidades
@@ -208,6 +333,7 @@ endif;
 					if(json[0]==1){
 						pendientes();
 						$(".loscuantos").text(json[1]);
+						$(".cancelar_orden").trigger("click");
 						toastr.success("Agregado al carrito");	
 					}else{
 
@@ -216,6 +342,41 @@ endif;
 
 				}
 			});
+		});
+
+		$(document).on("click",".addPersonalizada",function(e){
+			e.preventDefault();
+			var tamanio=$(".sel_tamanio").val();
+			var masa=$(".sel_masa").val();
+			let array_ingre=new Array();
+			$(".losingres li").each(function(){
+        	    console.log();
+        	    array_ingre.push({
+        	    	'ingredient_id':$(this).attr('data-id'),
+        	    });
+        	});
+        	if(array_ingre.length>0){
+			$.ajax({
+				url:'/api/orders/personalizada',
+				type:'post',
+				dataType:'json',
+				data:{masa_id:masa,tamanio_id:tamanio,array_ingre,total:totalito,tipo:4,cantidad:1,token:localStorage.getItem('token')},
+				success:function(json){
+					if(json[0]==1){
+						pendientes();
+						$(".loscuantos").text(json[1]);
+						$(".cancelar_orden").trigger("click");
+						toastr.success("Agregado al carrito");	
+					}else{
+
+					}
+				},error: function(error){
+
+				}
+			});
+			}else{
+				toastr.info("Debe agregar un ingrediente");
+			}
 		});
 
 		//agregar pizza de especialidad
@@ -232,6 +393,7 @@ endif;
 					if(json[0]==1){
 						pendientes();
 						$(".loscuantos").text(json[1]);
+						$(".cancelar_orden").trigger("click");
 						toastr.success("Agregado al carrito");
 					}else{
 
@@ -256,6 +418,8 @@ endif;
 				success:function(json){
 					if(json[0]==1){
 						pendientes();
+						$(".loscuantos").text(json[1]);
+						$(".cancelar_orden").trigger("click");
 						toastr.success("Agregado al carrito");
 					}else{
 
@@ -282,6 +446,30 @@ endif;
 				type:'delete',
 				dataType:'json',
 				data:{precio:precio,id_order,token:localStorage.getItem('token')},
+				success:function(json){
+					if(json[0]==1){
+						pendientes();
+						$(".loscuantos").text(json[1]);
+						toastr.success("Eliminado con éxito del carrito");
+					}else{
+
+					}
+				},error: function(error){
+
+				}
+			});
+		});
+
+		$(document).on("click",".quitar_personalizada",function(e){
+			e.preventDefault();
+			var id=$(this).attr("data-id");
+			var id_perso=$(this).attr("data-order");
+			var precio=$(this).attr("data-precio");
+			$.ajax({
+				url:'/api/orders/delete4/'+id,
+				type:'delete',
+				dataType:'json',
+				data:{precio:precio,id_perso,token:localStorage.getItem('token')},
 				success:function(json){
 					if(json[0]==1){
 						pendientes();
@@ -374,6 +562,7 @@ endif;
 				success:function(json){
 					if(json[0]==1){
 						pendientes();
+						$(".loscuantos").text(json[2]);
 						$("#modal_ordenar").modal("hide");
 						window.open(
 			                'pdf/'+json[1].id,

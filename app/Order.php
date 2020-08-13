@@ -19,6 +19,11 @@ class Order extends Model
     	return $this->hasMany('App\OrderDetail2');
     }
 
+    public function personalizadas()
+    {
+        return $this->hasMany('App\personalizada');
+    }
+
     public function extras()
     {
     	return $this->hasMany('App\OrderExtra');
@@ -58,6 +63,19 @@ class Order extends Model
     		//}
     		$html.='</ul></div>';
     	}
+       
+        foreach($orden->personalizadas as $p){
+            $html.='<div class="col-sm-12"><span class="float-left"><b>personalizada</b></span><span class="float-right"><b>$'.number_format($p->precio,2).'</b></span> &nbsp;<a class="quitar_personalizada" data-precio="'.$p->precio.'" data-order="'.$p->id.'" data-id="'.$orden->id.'" href="javascript:void(0)"><i style="color:red;" class="fas fa-trash"></i></a></div>';
+            $html.='<div class="col-sm-12"><ul>';
+            //
+                $html.='<li>'.$p->tamanio->nombre.' '.$p->tamanio->precio.'</li>';
+                $html.='<li>'.$p->masa->nombre.'</li>';
+                foreach($p->detalles as $dd){
+                    $html.='<li>'.$dd->ingredient->nombre.' +'.$dd->ingredient->precio.'</li>';
+                }
+            $html.='</ul></div>';
+        }
+
     	foreach($orden->extras as $e){
     		$html.='<div class="col-sm-12"><span class="float-left"><b>'.$e->extra->nombre.'</b></span><span class="float-right"><b>$'.number_format($e->extra->precio,2).'</b></span> &nbsp;<a class="quitar_extra" data-precio="'.$e->extra->precio.'" data-extra="'.$e->id.'" data-id="'.$orden->id.'" href="javascript:void(0)"><i style="color:red;" class="fas fa-trash"></i></a></div>';
     		$html.='<div class="col-sm-12">';
@@ -81,8 +99,9 @@ class Order extends Model
     		$cuantos=0;
 	    	$cuantos1=$orden->details->count();
 	    	$cuantos2=$orden->details2->count();
-	    	$cuantos3=$orden->extras->count();
-	    	$cuantos=$cuantos1+$cuantos2+$cuantos3;
+            $cuantos3=$orden->extras->count();
+	    	$cuantos4=$orden->personalizadas->count();
+	    	$cuantos=$cuantos1+$cuantos2+$cuantos3+$cuantos4;
 	    	return $cuantos;
 	    }else{
 	    	return 0;

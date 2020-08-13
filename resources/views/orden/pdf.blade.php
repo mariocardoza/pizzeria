@@ -3,7 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Pedido</title>
-	<link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 </head>
 <body>
@@ -49,6 +50,16 @@
     			<li>{{$d2->pizzas->ingredient->nombre}}</li>
     		</ul></div>
     	@endforeach
+        @foreach($orden->personalizadas as $p)
+            <div class="col-sm-12"><span class="float-left"><b>personalizada</b></span><span class="float-right"><b>${{number_format($p->precio,2)}}</b></span> &nbsp;</div>
+            <div class="col-sm-12"><ul>
+               <li>{{$p->tamanio->nombre}} {{$p->tamanio->precio}}</li>
+                <li>{{$p->masa->nombre}}</li>
+                @foreach($p->detalles as $dd)
+                    <li>{{$dd->ingredient->nombre}} +{{$dd->ingredient->precio}}</li>
+                @endforeach
+            </ul></div>
+        @endforeach
     	@foreach($orden->extras as $e)
     		<div class="col-sm-12"><span class="float-left"><b>{{$e->extra->nombre}}</b></span> - <span class="float-right"><b>${{number_format($e->extra->precio,2)}}</b></span> &nbsp;<a class="quitar_extra" data-precio="'.$e->extra->precio.'" data-extra="'.$e->id.'" data-id="'.$orden->id.'" href="javascript:void(0)"><i style="color:red;" class="fas fa-trash"></i></a></div>
     	@endforeach

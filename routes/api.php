@@ -29,5 +29,7 @@ Route::apiResource('specialities', 'api\SpecialityController');
 Route::get('orders/getPending/{token}','api\OrderController@getPending');
 Route::delete('orders/delete2/{token}','api\OrderController@delete2');
 Route::delete('orders/delete3/{token}','api\OrderController@delete3');
+Route::delete('orders/delete4/{token}','api\OrderController@delete4');
 Route::post('orders/confirmar/{id}','api\OrderController@confirmar');
+Route::post('orders/personalizada','api\OrderController@personalizada');
 Route::apiResource('orders', 'api\OrderController');

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\OrderDetail;
 use App\OrderDetail2;
+use App\Personalizada;
+use App\PersonalizadaDetail;
 use App\OrderExtra;
 use DB;
 
@@ -35,6 +37,57 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function personalizada(Request $request)
+    {
+        $count=Order::whereToken($request->token)->whereEstado(1)->first();
+        try{
+        if($count!=''){
+            DB::beginTransaction();
+            $order=Order::findorFail($count->id);
+            $total=$order->total;
+            $t=$total+$request->total;
+            $order->total=$t;
+            $order->save();
+            $per=Personalizada::create([
+                    'order_id'=>$order->id,
+                    'masa_id'=>$request->masa_id,
+                    'tamanio_id'=>$request->tamanio_id,
+                    'precio'=>$request->total,
+                ]);
+            foreach($request->array_ingre as $a){
+                $p=PersonalizadaDetail::create([
+                    'personalizada_id'=>$per->id,
+                    'ingredient_id'=>$a['ingredient_id'],
+                ]);
+            }
+        }else{
+            $order=Order::create([
+                'tipo'=>$request->tipo,
+                'total'=>$request->total,
+                'token'=>$request->token,
+            ]);
+
+            $per=Personalizada::create([
+                    'order_id'=>$order->id,
+                    'masa_id'=>$request->masa_id,
+                    'tamanio_id'=>$request->tamanio_id,
+                    'precio'=>$request->total,
+                ]);
+
+            foreach($request->array_ingre as $a){
+                $p=PersonalizadaDetail::create([
+                'personalizada_id'=>$per->id,
+                'ingredient_id'=>$a['ingredient_id'],
+            ]);
+            }
+        }
+        $cuantos=Order::contar_carrito($request->token);
+        DB::commit();
+        return array(1,$cuantos);
+        }catch(Exception $e){
+            return array(-1,"error",$e->getMessage());
+        }
+    }
     public function store(Request $request)
     {
         try{
@@ -222,6 +275,29 @@ class OrderController extends Controller
         }
     }
 
+     public function delete4($id,Request $request)
+    {
+        try{
+            DB::beginTransaction();
+            $orden=Order::find($id);
+            $total=$orden->total;
+            $precio=$request->precio;
+            $orden->total=$total-$precio;
+            $orden->save();
+            $detail=Personalizada::find($request->id_perso);
+            $detail->delete();
+            $cuantos=Order::contar_carrito($request->token);
+            if($cuantos==0){
+                $orden->delete();
+            }
+            DB::commit();
+            return array(1,$cuantos);
+        }catch(Exception $e){
+            DB::rollback();
+            return array(-1,"error",$e->getMessage());
+        }
+    }
+
     public function confirmar($id,Request $request)
     {
         try{
@@ -233,7 +309,8 @@ class OrderController extends Controller
             $orden->estado=2;
             $orden->correlativo=Order::correlativo();
             $orden->save();
-            return array(1,$orden);
+            $cuantos=Order::contar_carrito($request->token);
+            return array(1,$orden,$cuantos);
         }catch(Exception $e){
             return array(-1,"error",$e->getMessage());
         }

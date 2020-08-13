@@ -15,7 +15,10 @@ class OrdenController extends Controller
     	$pizzas=PizzaIngredient::whereEstado(1)->get();
     	$especialidades=PizzaSpecialitie::whereEstado(1)->get();
     	$extras=Extra::whereEstado(1)->get();
-    	return view('orden.orden',compact('pizzas','especialidades','extras'));
+        $tamanios=\App\Tamanio::whereEstado(1)->get();
+        $masas=\App\Masa::whereEstado(1)->get();
+        $ingredientes=\App\Ingredient::whereEstado(1)->get();
+    	return view('orden.orden',compact('pizzas','especialidades','extras','tamanios','masas','ingredientes'));
     }
 
     public function pedidos()
